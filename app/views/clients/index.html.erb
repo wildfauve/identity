@@ -1,0 +1,29 @@
+<div class='alert alert-info fade in' data-alert='alert'>
+   <h3>Clients</h3>
+</div>
+
+<table class="table">
+   <thead>
+     <tr>
+       <th>Name</th>
+       <th>Client ID</th>
+       <th>Secret</th>       
+       <th>Actions</th>      
+     </tr>
+   </thead>
+   <tbody>
+      <% for client in @clients %>         
+         <tr>
+            <td>
+               <%= link_to client.name, client_path(client)%>
+            </td>
+            <td><%= client.client_id %></td>
+            <td><%= client.secret %></td>            
+            <td>
+               <%= link_to "Show",  client_path(client), class: "btn btn-default"%>
+               <%= link_to "Edit",  edit_client_path(client), class: "btn btn-default"%>               
+            </td>
+         </tr>
+      <% end %>
+   </tbody>
+</table>

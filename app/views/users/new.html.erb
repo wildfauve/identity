@@ -1,0 +1,10 @@
+<div class='alert alert-info fade in' data-alert='alert'>
+   <h3>Sign Up</h3>
+</div>
+
+<%= simple_form_for @user,  as: 'user', html: { class: 'form-horizontal' } do |f| %>
+   <%= f.input :name, label: "User Name" %>
+   <%= f.input :password, label: "password" %>   
+   <%= f.input :email, label: "email"%>
+   <%= f.button :submit, "Signup" %>
+<% end %>

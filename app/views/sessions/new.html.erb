@@ -1,0 +1,9 @@
+<div class='alert alert-info fade in' data-alert='alert'>
+   <h3>Login</h3>
+</div>
+
+<%= simple_form_for @session,  url: sessions_path, method: :post,  html: { class: 'form-horizontal' } do |f| %>
+   <%= f.input :name, label: "User Name" %>
+   <%= f.input :password, label: "password" %>   
+   <%= f.button :submit, "login" %>
+<% end %>
