@@ -4,5 +4,6 @@
 
 <%= simple_form_for @client,  html: { class: 'form-horizontal' } do |f| %>
    <%= f.input :name, label: "Name" %>
-   <%= f.button :submit, "login" %>
+   <%= f.input :redirect_uri, label: "Re-Direct URL"%>
+   <%= f.button :submit, "Submit" %>
 <% end %>

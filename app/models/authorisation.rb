@@ -11,6 +11,7 @@ class Authorisation
   field :expires_in, type: Time
   field :time_created, type: Time
   
+  
   embedded_in :client
   
   def self.create_it(params: nil, user: nil)
@@ -22,7 +23,7 @@ class Authorisation
     self.redirect_url = params[:redirect_uri]
     self.auth_code = SecureRandom.urlsafe_base64(nil, false)
     self.state = params[:state]
-    self.user_id = user.id
+    self.user_id = user.id if user
     self
   end
   
@@ -32,12 +33,29 @@ class Authorisation
     self.expires_in = Time.now + 1.hour
   end
   
+  def add_user(user: nil)
+    self.user_id = user.id
+    self
+  end
+  
   def expiry_duration
     self.expires_in - self.time_created
   end
     
   def user
-    User.find(self.user_id)
+    @user ||= User.find(self.user_id)
+  end
+  
+  def id_token
+    id = {
+          iss: "http://id.kupe.fishserve.co.nz",
+          sub: self.user.id.to_s,
+          aud: client.client_id,
+          exp: self.expires_in,
+          email_verified: self.user.email,
+          preferred_username: self.user.name
+          }
+    JWT.encode(id, Identity::Application.config.id_token_secret)
   end
   
 end

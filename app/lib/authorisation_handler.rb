@@ -6,11 +6,17 @@ class AuthorisationHandler
   
   # {"client_id"=>"client_service", "redirect_uri"=>"http://localhost:3000/identities/authorisation", "response_type"=>"code", "state"=>"signup"}  
   
-  def process(params: nil, current_user: nil)
+  def process(params: nil, current_user: nil, client_id: nil)
     @curr_user = current_user
-    @client = find_client(client_id: params[:client_id])
-    raise if !client
-    @auth = client.create_auth_req(params: params, user: @curr_user)
+    params[:client_id].nil? ? cl_id = client_id : cl_id = params[:client_id]
+    @client = find_client(client_id: cl_id)
+    if params[:client_id].nil? && client_id # if we have an attempt that incorporated a login prior to replying with an auth code
+      @auth = @client.last_auth_request(user: @curr_user)
+    elsif params[:client_id] && client_id.nil? # if the user is already logged in
+      @auth = @client.create_auth_req(params: params, user: @curr_user)
+    else
+      raise
+    end
     if @curr_user
       publish(:return_auth_event, self)
     else

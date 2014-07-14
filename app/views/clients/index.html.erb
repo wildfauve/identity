@@ -7,7 +7,8 @@
      <tr>
        <th>Name</th>
        <th>Client ID</th>
-       <th>Secret</th>       
+       <th>Secret</th>
+       <th>Redirect URL</th>              
        <th>Actions</th>      
      </tr>
    </thead>
@@ -18,7 +19,8 @@
                <%= link_to client.name, client_path(client)%>
             </td>
             <td><%= client.client_id %></td>
-            <td><%= client.secret %></td>            
+            <td><%= client.secret %></td>
+            <td><%= client.redirect_uri %></td>            
             <td>
                <%= link_to "Show",  client_path(client), class: "btn btn-default"%>
                <%= link_to "Edit",  edit_client_path(client), class: "btn btn-default"%>               

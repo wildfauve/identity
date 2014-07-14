@@ -36,6 +36,8 @@ gem 'faraday'
 
 gem 'simple_form', '~> 3.1.0.rc1'
 
+gem 'jwt'
+
 
 group :development do
   gem 'better_errors'

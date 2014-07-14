@@ -12,22 +12,30 @@ class ClientsController < ApplicationController
     client = Client.new
     client.subscribe(self)    
     client.create_me(params[:client])
-    respond_to do |format|
-      if @client.valid?
-        format.html { redirect_to clients_path }
-      else
-        format.html { render action: "new" }
-      end
-    end      
-    
+  end
+  
+  def edit
+    @client = Client.find(params[:id])
+  end
+  
+  def update
+    client = Client.find(params[:id])
+    client.subscribe(self)    
+    client.update_me(params[:client])
   end
   
   def success_client_save_event(client)
+    respond_to do |f|
+      f.html { redirect_to clients_path}
+    end
+  end
+  
+  def failed_client_save_event(client)
     @client = client
     respond_to do |f|
-      f.html { render 'index'}
+      f.html { render '_form'}
     end
-    
+
   end
   
 end

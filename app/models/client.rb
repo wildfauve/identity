@@ -7,31 +7,44 @@ class Client
   
   embeds_many :authorisations
   
+  validates_presence_of :name, :redirect_uri
+  
   field :name, type: String
   field :client_id, type: String
   field :secret, type: String
+  field :redirect_uri, type: String
   
-  after_save :publish_save_event
+  #after_save :publish_save_event
   
   def create_me(params)
     self.name = params[:name]
     self.client_id = name.downcase.gsub(/ /, "_")
-    self.secret = BCrypt::Engine.generate_salt
-    self.save!
-    self
+    self.secret = SecureRandom.urlsafe_base64(nil, false)
+    self.redirect_uri = params[:redirect_uri]
+    self.save
   end
   
   
-  def update_it(params)
+  def update_me(params)
     self.name = params[:name]
-    self.save!
-    self 
+    self.redirect_uri = params[:redirect_uri]
+    determine_save_event_state()
   end
     
+  def change_credentials
+    self.secret = SecureRandom.urlsafe_base64(nil, false)
+  end
     
   def create_auth_req(params: nil, user: nil)
     auth = Authorisation.create_it(params: params, user: user)
     self.authorisations << auth
+    self.save
+    auth
+  end
+  
+  def last_auth_request(user: nil)
+    auth = self.authorisations.last
+    auth.add_user(user: user)
     self.save
     auth
   end
@@ -55,10 +68,15 @@ class Client
   
   private
     
-  
-  def publish_save_event
-    publish(:success_client_save_event, self)
-  end
     
+  def determine_save_event_state
+    if self.valid?
+      self.save
+      publish(:success_client_save_event, self)
+    else
+      publish(:failed_client_save_event, self)
+    end
+  end
+      
   
 end
