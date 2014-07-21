@@ -53,6 +53,11 @@ class Client
   def get_authorisation(code: nil)
     self.authorisations.where(auth_code: code).first
   end
+
+  def get_access_authorisation(access_code: nil)
+    self.authorisations.where(access_code: access_code).first
+  end
+
   
   def provide_access(auth)
     auth.create_access_code
@@ -60,8 +65,7 @@ class Client
     auth
   end
   
-  def get_user(access_code: nil)
-    auth = self.authorisations.where(access_code: access_code).first
+  def get_user(auth: nil)
     raise if !auth
     auth.user
   end

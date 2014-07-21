@@ -51,6 +51,19 @@ class AuthorisationHandler
     cl
   end
   
+  def get_client_by_access_code(access_code: nil)
+    # remove the Bearer part of the access code
+    raise if !access_code
+    bearer = access_code.split(/ /)
+    raise if bearer.size != 2 || bearer[0] != "Bearer"
+    code = bearer[1]
+    client = Client.where('authorisations.access_code' => code).first
+    raise if !client
+    auth = client.get_access_authorisation(access_code: code)
+    raise if !auth
+    {client: client, auth: auth }
+  end
+  
   def valid_client(client_credentials: nil)
     cl = find_client(client_id: client_credentials[:client_id])
     raise if cl.secret != client_credentials[:client_secret]

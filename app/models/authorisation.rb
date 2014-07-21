@@ -48,15 +48,14 @@ class Authorisation
   
   def id_token
     id = {
-          iss: "http://id.kupe.fishserve.co.nz",
-          sub: self.user.id.to_s,
-          aud: client.client_id,
-          exp: self.expires_in,
-          email_verified: self.user.email,
-          preferred_username: self.user.name
+            iss: "http://id.kupe.fishserve.co.nz",
+            sub: self.user.id.to_s,
+            aud: client.client_id,
+            exp: self.expires_in,
+            email_verified: self.user.email,
+            preferred_username: self.user.name
           }
     JWT.encode(id, Identity::Application.config.id_token_secret)
   end
   
 end
-

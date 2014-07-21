@@ -42,12 +42,13 @@ class UsersController < ApplicationController
     end
   end
   
-  def me
-    authenticate_with_http_basic do |u, p|
-      client = AuthorisationHandler.new.valid_client(client_credentials: {client_id: u, client_secret: p})
-      @user = client.get_user(access_code: params[:access_code])
-      render 'me'
-    end
+  def userinfo
+    #authenticate_with_http_basic do |u, p|
+    #client = AuthorisationHandler.new.valid_client(client_credentials: {client_id: u, client_secret: p})
+    client_auth = AuthorisationHandler.new.get_client_by_access_code(access_code: request.headers['Authorization'])
+    @user = client_auth[:client].get_user(auth: client_auth[:auth])
+    render 'me'
+      #end
 
   end
   

@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   
   get "log_out" => 'sessions#destroy', as: 'log_out' 
   
-  get 'me' => "users#me" 
+  get 'userinfo' => "users#userinfo" 
   
   resources :users
   
