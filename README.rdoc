@@ -1,13 +1,17 @@
 == README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+== Intro 
 
-Things you may want to cover:
+This app implements a very simple ID Service based on the OAuth2 and OpenID Connect protocol.  It acts as a standalone identity service that allows a remote Relying Party to delegate user Authentication.  Users and Relying Parties are configured in the ID Service. The Relying Party does not have to support authentication or user management.  It uses OAuth/OpenId Connect to transfer the responsibility for authentication to the ID Service.
 
-* Ruby version
+== Applicable Use Cases
 
-* System dependencies
+== Getting Started
+
+* Ruby version: 2.0.0
+
+* System dependencies: Requires:
+ * MongoDB with Mongoid
 
 * Configuration
 
@@ -23,6 +27,3 @@ Things you may want to cover:
 
 * ...
 
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
