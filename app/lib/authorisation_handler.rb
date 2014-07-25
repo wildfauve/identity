@@ -3,10 +3,9 @@ class AuthorisationHandler
   include Wisper::Publisher
   
   attr_accessor :client, :auth
-  
-  # {"client_id"=>"client_service", "redirect_uri"=>"http://localhost:3000/identities/authorisation", "response_type"=>"code", "state"=>"signup"}  
-  
+    
   def process(params: nil, current_user: nil, client_id: nil)
+    raise if params[:response_type] != "code"
     @curr_user = current_user
     params[:client_id].nil? ? cl_id = client_id : cl_id = params[:client_id]
     @client = find_client(client_id: cl_id)
@@ -14,7 +13,7 @@ class AuthorisationHandler
       @auth = @client.last_auth_request(user: @curr_user)
     elsif params[:client_id] && client_id.nil? # if the user is already logged in
       @auth = @client.create_auth_req(params: params, user: @curr_user)
-    else
+    else # there is no client_id
       raise
     end
     if @curr_user
@@ -33,12 +32,11 @@ class AuthorisationHandler
   
   # {"grant_type"=>"authorization",
   # "code"=>"s0NQ3nDgcaz5fY2mL-u-ug",
-  #  "redirect_uri"=>"http://localhost:3000/identities/authorisation",
-  #  "action"=>"create",
-  #  "controller"=>"token"}
+  #  "redirect_uri"=>"http://localhost:3000/identities/authorisation"
   
   def provide_access_token(params: nil, client_credentials: nil)
-    @client = valid_client(client_credentials: client_credentials)
+    @client = validate_client_credentials(client_credentials: client_credentials)
+    raise if params[:redirect_uri] != @client.redirect_uri
     @auth = @client.get_authorisation(code: params[:code])
     publish(:failed_access_request, self) if !auth
     @client.provide_access(auth)
@@ -64,7 +62,7 @@ class AuthorisationHandler
     {client: client, auth: auth }
   end
   
-  def valid_client(client_credentials: nil)
+  def validate_client_credentials(client_credentials: nil)
     cl = find_client(client_id: client_credentials[:client_id])
     raise if cl.secret != client_credentials[:client_secret]
     cl

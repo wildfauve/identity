@@ -36,6 +36,7 @@ class Client
   end
     
   def create_auth_req(params: nil, user: nil)
+    raise if self.redirect_uri != params[:redirect_uri]
     auth = Authorisation.create_it(params: params, user: user)
     self.authorisations << auth
     self.save

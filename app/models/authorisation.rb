@@ -51,7 +51,7 @@ class Authorisation
             iss: "http://id.kupe.fishserve.co.nz",
             sub: self.user.id.to_s,
             aud: client.client_id,
-            exp: self.expires_in,
+            exp: self.expires_in.to_i,
             email_verified: self.user.email,
             preferred_username: self.user.name
           }

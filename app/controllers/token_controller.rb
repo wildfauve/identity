@@ -4,9 +4,7 @@ class TokenController < ApplicationController
   
   # {"grant_type"=>"authorization",
   # "code"=>"s0NQ3nDgcaz5fY2mL-u-ug",
-  #  "redirect_uri"=>"http://localhost:3000/identities/authorisation",
-  #  "action"=>"create",
-  #  "controller"=>"token"}
+  #  "redirect_uri"=>"http://localhost:3000/identities/authorisation"
   
   def create
     authenticate_with_http_basic do |u, p|

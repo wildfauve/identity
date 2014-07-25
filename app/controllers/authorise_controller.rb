@@ -1,5 +1,7 @@
 class AuthoriseController < ApplicationController
   
+  # {"client_id"=>"client_service", "redirect_uri"=>"http://localhost:3000/identities/authorisation", "response_type"=>"code", "scope"=>"signup"}  
+  
   def index
     #raise if session[:client_id] && @current_user
     auth_req = AuthorisationHandler.new
