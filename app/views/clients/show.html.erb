@@ -1,0 +1,8 @@
+<h1><%= @client.name%></h1>
+<p>Id: <%= @client.client_id %></p>
+<p>Secret: <%= @client.secret %></p>
+<p>Redirect_uri: <%= @client.redirect_uri %></p>
+
+<% for event in @client.timestamps %>
+   <p>Time: <%= event.timestamp %>Name: <%= event.name %></p>   
+<% end %>

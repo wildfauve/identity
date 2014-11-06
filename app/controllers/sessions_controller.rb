@@ -17,8 +17,9 @@ class SessionsController < ApplicationController
   end
   
   def destroy
-    session[:user_id] = nil
-    redirect_to root_url, notice: "Logged out"
+    auth = AuthorisationHandler.new
+    auth.subscribe(self)
+    auth.logout(id_token: params[:id_token_hint], redirect_uri: params[:post_logout_redirect_uri], current_user: @current_user, local: params[:local])
   end
   
   def continue_oauth_auth_req_event(user, client_id)
@@ -35,6 +36,11 @@ class SessionsController < ApplicationController
   def invalid_login_event(user)
     flash.now.alert = "Invalid Login"
     redirect_to new_sessions_path
+  end
+  
+  def successful_logout_event(redirect_uri)
+    session[:user_id] = nil
+    redirect_to redirect_uri
   end
   
 end

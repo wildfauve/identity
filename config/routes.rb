@@ -6,11 +6,19 @@ Rails.application.routes.draw do
   
   get "log_in" => 'sessions#new', as: 'log_in' 
   
-  get "log_out" => 'sessions#destroy', as: 'log_out' 
+  get "logout" => 'sessions#destroy', as: 'log_out' 
   
   get 'userinfo' => "users#userinfo" 
   
   resources :users
+  
+  namespace :api do
+    namespace :v1 do
+      resources :users
+      put 'metadata' => "metadata#update"
+    end
+  end
+  
   
   resources :sessions
   

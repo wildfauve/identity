@@ -5,23 +5,12 @@ class UsersController < ApplicationController
   
   def new 
     @user = User.new 
-    respond_to do |format| 
-      format.html 
-    end 
   end
   
   def create
-    @user = User.create_it(params)
-    respond_to do |format|
-      if @user.valid?
-        format.html { redirect_to root_url, notice: "Signed Up" }
-        format.json
-      else
-        format.html { render action: "new" }
-        format.json
-      end
-    end
-    
+    user_mgr = UserManager.new
+    user_mgr.subscribe(self)
+    user_mgr.create_user(user: params, client_id: session[:client_id])
   end
   
   def edit
@@ -31,15 +20,6 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])    
     @user.update_it(params)
-    respond_to do |format|
-      if @user.valid?
-        format.html { redirect_to users_path }
-        format.json
-      else
-        format.html { render action: "edit" }
-        format.json
-      end
-    end
   end
   
   def userinfo
@@ -48,8 +28,13 @@ class UsersController < ApplicationController
     client_auth = AuthorisationHandler.new.get_client_by_access_code(access_code: request.headers['Authorization'])
     @user = client_auth[:client].get_user(auth: client_auth[:auth])
     render 'me'
-      #end
-
+  end
+  
+  def continue_oauth_auth_req_event(usermgr)
+    # {"client_id"=>"client_service", "redirect_uri"=>"http://localhost:3000/identities/authorisation", "response_type"=>"code", "scope"=>"signup"}
+    session[:client_id] = nil
+    redirect_to authorise_index_path(client_id: usermgr.client.client_id, response_type: "code", scope: "basic_profile",
+                                     redirect_uri: usermgr.client.redirect_uri)
   end
   
 end

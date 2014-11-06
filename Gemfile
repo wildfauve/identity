@@ -38,6 +38,7 @@ gem 'simple_form', '~> 3.1.0.rc1'
 
 gem 'jwt'
 
+gem 'sneakers'
 
 group :development do
   gem 'better_errors'

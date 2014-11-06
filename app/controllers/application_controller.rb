@@ -8,6 +8,12 @@ class ApplicationController < ActionController::Base
   
   before_filter :current_user
   
+  rescue_from Exceptions::ClientIdInvalid, with: :invalid_client_id
+  
+  def invaid_client_id
+    raise
+  end
+  
   private
   
   def current_user

@@ -27,13 +27,13 @@ class Authorisation
     self
   end
   
-  def create_access_code
+  def create_access_token
     self.access_code = SecureRandom.urlsafe_base64(nil, false)
     self.time_created = Time.now
     self.expires_in = Time.now + 1.hour
   end
   
-  def add_user(user: nil)
+  def add_user(user: nil) 
     self.user_id = user.id
     self
   end
@@ -52,7 +52,8 @@ class Authorisation
             sub: self.user.id.to_s,
             aud: client.client_id,
             exp: self.expires_in.to_i,
-            email_verified: self.user.email,
+            email: self.user.email,
+            email_verified: false,
             preferred_username: self.user.name
           }
     JWT.encode(id, Identity::Application.config.id_token_secret)
