@@ -64,6 +64,12 @@ GEM
     execjs (2.2.1)
     faraday (0.9.0)
       multipart-post (>= 1.2, < 3)
+    foundation-icons-sass-rails (3.0.0)
+      railties (>= 3.1.1)
+      sass-rails (>= 3.1.1)
+    foundation-rails (5.4.5.0)
+      railties (>= 3.1.0)
+      sass (>= 3.2.0)
     hike (1.2.3)
     i18n (0.6.9)
     jbuilder (2.1.2)
@@ -122,7 +128,6 @@ GEM
     rake (10.3.2)
     rdoc (4.1.1)
       json (~> 1.4)
-    redis (3.1.0)
     rest_client (1.7.3)
       netrc (~> 0.7.7)
     sass (3.2.19)
@@ -137,9 +142,6 @@ GEM
     serverengine (1.5.9)
       sigdump (~> 0.2.2)
     sigdump (0.2.2)
-    simple_form (3.1.0.rc2)
-      actionpack (~> 4.0)
-      activemodel (~> 4.0)
     slop (3.5.0)
     sneakers (0.0.7)
       bunny (>= 0.10.0)
@@ -181,6 +183,8 @@ DEPENDENCIES
   binding_of_caller
   coffee-rails (~> 4.0.0)
   faraday
+  foundation-icons-sass-rails
+  foundation-rails
   jbuilder (~> 2.0)
   jquery-rails
   jwt
@@ -189,11 +193,9 @@ DEPENDENCIES
   pry
   railroady
   rails (= 4.1.2)
-  redis
   rest_client
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)
-  simple_form (~> 3.1.0.rc1)
   sneakers
   spring
   turbolinks

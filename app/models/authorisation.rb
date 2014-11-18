@@ -56,6 +56,7 @@ class Authorisation
             email_verified: false,
             preferred_username: self.user.name
           }
+    id[:reference_claims] = self.user.id_references.collect {|id| {ref: id.ref, link: id.link}}
     JWT.encode(id, Identity::Application.config.id_token_secret)
   end
   

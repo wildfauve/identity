@@ -26,7 +26,7 @@ class Client
     self.redirect_uri = params[:redirect_uri]
     self.post_logout_redirect_uri = params[:post_logout_redirect_uri]
     self.save
-    self.publish(:success_client_save_event, self)
+    publish(:success_client_save_event, self)
   end
   
   
@@ -41,18 +41,23 @@ class Client
     self.secret = SecureRandom.urlsafe_base64(nil, false)
   end
     
-  def create_auth_req(params: nil, user: nil)
+  def get_auth_req(params: nil, user: nil)
     raise if self.redirect_uri != params[:redirect_uri]
-    auth = Authorisation.create_it(params: params, user: user)
-    self.authorisations << auth
-    self.timestamps << Timestamp.new_state(state: :create_auth_req_time , name: :auth_req)
-    self.save
-    auth
+    auth = self.authorisations.where(user_id: user.id).gte(expires_in: Time.now + 10.seconds).first
+    if auth
+      auth
+    else      
+      auth = Authorisation.create_it(params: params, user: user)
+      self.authorisations << auth
+      self.timestamps << Timestamp.new_state(state: :create_auth_req_time , name: :auth_req)
+      self.save
+      auth
+    end
   end
   
   def last_auth_request(user: nil)
     auth = self.authorisations.last
-    auth.add_user(user: user)
+    auth.add_user(user: user) if user
     self.save
     auth
   end

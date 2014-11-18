@@ -12,7 +12,7 @@ namespace :rabbitmq do
     x = ch.fanout("kiwi.events")
 
     # get or create queue (note the durable setting)
-    queue = ch.queue("id.parties", durable: true)
+    queue = ch.queue("id.event", durable: true)
 
     # bind queue to exchange
     queue.bind("kiwi.events")

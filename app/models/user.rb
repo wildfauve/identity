@@ -11,6 +11,7 @@ class User
   field :email, :type => String
   field :password_hash, type: String 
   field :password_salt, type: String
+  field :pin, type: String
   
   embeds_many :metadata
   
@@ -23,13 +24,15 @@ class User
     user
   end
   
-  def self.authenticate(name: nil, password: nil)
-    user = self.where(name: name).first
-    if user && user.password_hash == BCrypt::Engine.hash_secret(password, user.password_salt)
-      user
+  def self.authenticate(name: nil, password: nil, pin: nil)
+    if pin
+      user = self.where(pin: pin).first
+      valid = user if user
     else
-      nil
+      user = self.where(name: name).first
+      valid = user if user && user.password_hash == BCrypt::Engine.hash_secret(password, user.password_salt)
     end
+    valid ? valid : nil
   end
 
 #{"event":"kiwi_identity",
@@ -38,7 +41,7 @@ class User
 # "id_token":{"sub":"545963db4d61745aead30000"}}
   def self.id_reference(event)
     user = self.find(event["id_token"]["sub"])
-    user.add_references(ref: event["ref"])
+    user.add_references(refs: event["ref"])
   end
 
   def create_me(params)
@@ -77,14 +80,14 @@ class User
     end
   end
   
-  def add_references(ref: nil)
-    ref.each do |r|
-      if r["ref"] != "sub"
-        id = self.id_references.where(ref: r["ref"]).first
-        if id
-          id.update_it(ref: r[href], link: r["link"], id: r["id"])
+  def add_references(refs: nil)
+    refs.each do |ref|
+      if ref["ref"] != "sub"
+        id_ref = self.id_references.where(ref: ref["ref"]).first
+        if id_ref
+          id_ref.update_it(ref: ref["ref"], link: ref["link"], id: ref["id"])
         else
-          self.id_references << IdReference.create_it(ref: r["ref"], link: r["link"], id: r["id"])
+          self.id_references << IdReference.create_it(ref: ref["ref"], link: ref["link"], id: ref["id"])
         end
       end
     end

@@ -28,13 +28,14 @@ gem 'mongoid', github: 'mongoid/mongoid'
 
 gem 'wisper'
 
-gem 'redis'
-
 gem 'rest_client'
 
 gem 'faraday'
 
-gem 'simple_form', '~> 3.1.0.rc1'
+#gem 'simple_form', '~> 3.1.0.rc1'
+
+gem 'foundation-rails'
+gem 'foundation-icons-sass-rails'
 
 gem 'jwt'
 

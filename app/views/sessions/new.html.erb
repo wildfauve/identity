@@ -1,9 +1,35 @@
-<div class='alert alert-info fade in' data-alert='alert'>
-   <h3>Login</h3>
-</div>
-
-<%= simple_form_for @session,  url: sessions_path, method: :post,  html: { class: 'form-horizontal' } do |f| %>
-   <%= f.input :name, label: "User Name" %>
-   <%= f.input :password, label: "password" %>   
-   <%= f.button :submit, "login" %>
+<%= form_for(@session, url: sessions_path, html: { class: "custom"}) do |f| %>
+   <% if @scope == "atm"%>
+      <div class="row">
+        <div class="small-2 columns">
+          <%= f.label :pin, class: "right inline"%>
+        </div>
+        <div class="small-10 columns">
+          <%= f.text_field :pin %>
+        </div> 
+      </div>
+   <% else%>
+      <div class="row">
+        <div class="small-2 columns">
+          <%= f.label :name, class: "right inline"%>
+        </div>
+        <div class="small-10 columns">
+          <%= f.text_field :name %>
+        </div> 
+      </div>
+      <div class="row">
+        <div class="small-2 columns">
+          <%= f.label :password, class: "right inline"%>
+        </div>
+        <div class="small-10 columns">
+          <%= f.password_field :password %>
+        </div> 
+      </div>
+   <% end %>
+   <div class="row">
+     <div class="small-10 small-offset-2 columns">
+       <%= f.submit 'Submit', :class => 'button small' %>
+     </div>
+   </div>
+   
 <% end %>
