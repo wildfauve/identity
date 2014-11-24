@@ -60,4 +60,29 @@ class Authorisation
     JWT.encode(id, Identity::Application.config.id_token_secret)
   end
   
+  def auth_event
+    {
+      event: "authorisation_event",
+      status: :success,
+      timestamps: {
+        expires_time: self.expires_in,
+        create_time: self.time_created
+      },
+      client: {
+        client_id: self.client.client_id,
+        client_name: self.client.name
+      },
+      user: {
+        name: self.user.name
+      },
+      party: {
+        _links: {
+          self: {
+            href: self.user.reference_for(ref: :party).link
+          }
+        }
+      }
+    }
+  end
+  
 end

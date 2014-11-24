@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title><%= content_for?(:title) ? yield(:title) : "Identity" %></title>
+
+    <%= stylesheet_link_tag    "application" %>
+    <%= javascript_include_tag "vendor/modernizr" %>
+    <%= csrf_meta_tags %>
+  </head>
+
+  <body>
+
+    <div class="icon-bar five-up">
+      <a class="item">
+        <i class="fi-home"></i>
+        <label>Home</label>
+      </a>
+      <%= link_to(clients_path) do %>
+        <i class="fi-torso"></i>
+        <label>Clients</label>
+      <% end %>            
+      <%= link_to(users_path, class: "item") do %>
+        <i class="fi-torso"></i>
+        <label>Users</label>
+      <% end %>        
+
+      
+      
+      <% if @current_user %>
+        <%= link_to(session_path(@current_user, local: true), method: :delete) do %>
+          <i class="fi-lock"></i>
+          <label>Logout <%= @current_user.name%></label>
+        <% end %>      
+      <% else %>
+        <%= link_to(log_in_path) do %>
+          <i class="fi-unlock"></i>
+          <label>Login</label>
+        <% end %>            
+        <%= link_to(sign_up_path) do %>
+          <i class="fi-unlock"></i>
+          <label>Signup</label>
+        <% end %>            
+      <% end %>
+    </div>
+    
+    <%= yield %>
+    <%= javascript_include_tag "application" %>
+  </body>
+</html>

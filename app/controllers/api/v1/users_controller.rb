@@ -4,6 +4,10 @@ class Api::V1::UsersController < Api::ApplicationController
     @users = User.all
   end
   
+  def show
+    @user = User.find(params[:id])
+  end
+  
   def update
     
   end

@@ -94,4 +94,8 @@ class User
     self.save
   end
   
+  def reference_for(ref: nil)
+    self.id_references.where(ref: ref).first
+  end
+  
 end
