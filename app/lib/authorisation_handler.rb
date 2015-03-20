@@ -41,8 +41,8 @@ class AuthorisationHandler
     #if in_flow_progress()
       #@auth = @client.last_auth_request(user: @curr_user)
       #else 
-      raise Exceptions::InvalidResponseCode if params[:response_type] != "code"      
-      @auth = @client.get_auth_req(params: params, user: @curr_user) if @curr_user
+    raise Exceptions::InvalidResponseCode if params[:response_type] != "code"      
+    @auth = @client.get_auth_req(params: params, user: @curr_user) if @curr_user
       #end
     if @curr_user
       publish(:return_auth_event, self)
@@ -116,10 +116,11 @@ class AuthorisationHandler
       local_logout(current_user: current_user) 
     else
       raise if !id_token
-      jwt = JWT.decode(id_token, Identity::Application.config.id_token_secret)
-      user = User.find(jwt[0]["sub"])
+      jwt = JSON::JWT.decode(id_token, PKI::PKI.new.key.public_key)
+      #jwt = JWT.decode(id_token, Identity::Application.config.id_token_secret)
+      user = User.find(jwt["sub"])
       raise if user != current_user
-      client = Client.where(client_id: jwt[0]["aud"]).first
+      client = Client.where(client_id: jwt["aud"]).first
       raise if redirect_uri != client.post_logout_redirect_uri
       publish(:successful_logout_event, redirect_uri)
     end

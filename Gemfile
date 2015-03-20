@@ -37,7 +37,9 @@ gem 'faraday'
 gem 'foundation-rails'
 gem 'foundation-icons-sass-rails'
 
-gem 'jwt'
+gem 'json-jwt'
+
+gem 'mc-settings'
 
 gem 'sneakers'
 

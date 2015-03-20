@@ -30,7 +30,7 @@ class EventHandler
   #end
   
   def self.return_auth_event(auth)
-    self.publish(exchange: "events", message: auth.auth.auth_event)
+    #self.publish(exchange: "events", message: auth.auth.auth_event)
   end
   
 end

@@ -19,6 +19,11 @@ class Client
   
   #after_save :publish_save_event
   
+  def self.with_user_auth(user: nil)
+    self.where("authorisations.user_id" => user.id)
+  end
+  
+  
   def create_me(params)
     self.name = params[:name]
     self.client_id = name.downcase.gsub(/ /, "_")

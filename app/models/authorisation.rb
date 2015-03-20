@@ -47,7 +47,8 @@ class Authorisation
   end
   
   def id_token
-    id = {
+    keys = PKI::PKI.new
+    claims = {
             iss: "http://id.kupe.fishserve.co.nz",
             sub: self.user.id.to_s,
             aud: client.client_id,
@@ -56,8 +57,10 @@ class Authorisation
             email_verified: false,
             preferred_username: self.user.name
           }
-    id[:reference_claims] = self.user.id_references.collect {|id| {ref: id.ref, link: id.link}}
-    JWT.encode(id, Identity::Application.config.id_token_secret)
+    claims[:reference_claims] = self.user.id_references.collect {|id| {ref: id.ref, link: id.link}}
+    jwt = JSON::JWT.new(claims)
+    jws = jwt.sign(keys.key, :RS512)
+    jws.to_s
   end
   
   def auth_event

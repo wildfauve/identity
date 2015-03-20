@@ -1,0 +1,18 @@
+User: <%= @user.name %>
+Email: <%= @user.email %>
+<h2>References</h2>
+<% @user.id_references.each do |ref| %>
+   <p>Ref: <%= ref.ref%></p>
+   <p>Link: <%= ref.link%></p>
+   <p>Identifier: <%= ref.identifier%></p>
+<% end %>
+
+<h2>MetaData</h2>
+<% @user.metadata.each do |meta| %>
+   <p>Name: <%= meta.name%></p>
+<% end %>
+
+<h2>Last Auths</h2>
+<% Client.with_user_auth(user: @user) do |client| %>
+   Client: <%= client.name %>
+<% end %>

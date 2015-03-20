@@ -14,6 +14,10 @@ class UsersController < ApplicationController
     user_mgr.create_user(user: params, client_id: session[:client_id])
   end
   
+  def show
+    @user = User.find(params[:id])
+  end
+  
   def edit
     @user = User.find(params[:id])
   end
