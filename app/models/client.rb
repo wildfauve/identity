@@ -103,5 +103,4 @@ class Client
     end
   end
       
-  
 end

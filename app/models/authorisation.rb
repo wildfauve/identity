@@ -49,12 +49,13 @@ class Authorisation
   def id_token
     keys = PKI::PKI.new
     claims = {
-            iss: "http://id.kupe.fishserve.co.nz",
+            iss: "http://id.kiwibank.io",
             sub: self.user.id.to_s,
             aud: client.client_id,
+            sub: client.client_id,
             exp: self.expires_in.to_i,
             email: self.user.email,
-            email_verified: false,
+            mail_verified: false,
             preferred_username: self.user.name
           }
     claims[:reference_claims] = self.user.id_references.collect {|id| {ref: id.ref, link: id.link}}
